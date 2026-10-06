@@ -1,327 +1,505 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tochukwu Ugwu — Cloud Infrastucture/Network Engineer</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tochukwu Ugwu | Cloud and Network Engineer</title>
+<meta name="description" content="Tochukwu Ugwu is a Cloud and Network Engineer specialising in Azure networking, hybrid connectivity and network security.">
+<meta name="theme-color" content="#0a1a45">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --paper:#EDEEE9;
-    --paper-line:#D7D9D0;
-    --ink:#16243A;
-    --steel:#3D5A80;
-    --copper:#B8542F;
-    --muted:#5B6472;
-    --card:#F7F7F3;
-    --mono: 'IBM Plex Mono', ui-monospace, monospace;
-    --sans: 'IBM Plex Sans', -apple-system, sans-serif;
-    --maxw: 880px;
-  }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    background:
-      linear-gradient(var(--paper-line) 1px, transparent 1px) 0 0/100% 32px,
-      var(--paper);
-    color:var(--ink);
-    font-family:var(--sans);
-    line-height:1.5;
-    -webkit-font-smoothing:antialiased;
-  }
-  @media (prefers-reduced-motion: reduce){
-    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
-  }
-  a{color:var(--steel);}
-  a:focus-visible, button:focus-visible{outline:2px solid var(--copper); outline-offset:3px;}
+:root{
+  --bg-a:#081338;      /* midnight sapphire */
+  --bg-b:#1d1052;      /* deep violet */
+  --bg-c:#0b5560;      /* deep teal */
+  --ink:#eef2ff;
+  --ink-soft:#b6c0e6;
+  --line:rgba(190,205,255,.18);
+  --glass:rgba(255,255,255,.06);
+  --glass-strong:rgba(255,255,255,.10);
+  --aqua:#5ee6d2;
+  --amber:#ffb85c;
+  --radius:18px;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --nav-h:72px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+html,body{height:100%}
+body{
+  font-family:var(--body);color:var(--ink);font-size:1.0625rem;line-height:1.65;
+  background:var(--bg-a);overflow-x:hidden;
+}
+/* Rich animated background */
+.bg{position:fixed;inset:0;z-index:-2;
+  background:
+    radial-gradient(60% 55% at 12% 8%, rgba(94,230,210,.20), transparent 60%),
+    radial-gradient(55% 60% at 92% 20%, rgba(255,184,92,.14), transparent 62%),
+    radial-gradient(70% 70% at 70% 100%, rgba(11,85,96,.75), transparent 65%),
+    linear-gradient(145deg,var(--bg-a) 0%,var(--bg-b) 55%,#0a2a55 100%);
+  background-size:140% 140%;animation:drift 28s ease-in-out infinite alternate;
+}
+@keyframes drift{from{background-position:0% 0%}to{background-position:100% 100%}}
+#net{position:fixed;inset:0;z-index:-1;width:100%;height:100%}
 
-  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px;}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px;border-radius:6px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--amber);color:#1a1200;padding:.5rem 1rem;border-radius:8px;z-index:100}
+.skip:focus{left:8px}
 
-  /* ---- top bar ---- */
-  .topbar{
-    background:var(--ink);
-    color:#DCE3EC;
-    font-family:var(--mono);
-    font-size:13px;
-    letter-spacing:0.02em;
-  }
-  .topbar .wrap{
-    display:flex; flex-wrap:wrap; gap:6px 18px;
-    padding-top:12px; padding-bottom:12px;
-  }
-  .topbar span{white-space:nowrap;}
-  .topbar .prompt{color:#7FB2A8;}
+/* Navigation */
+header.nav{position:fixed;top:0;left:0;right:0;z-index:20;padding:calc(14px + env(safe-area-inset-top,0px)) 20px 0;display:flex;justify-content:space-between;align-items:center;pointer-events:none}
+.brand{pointer-events:auto;font-family:var(--display);font-weight:800;font-size:1.15rem;text-decoration:none;letter-spacing:-.01em;
+  display:flex;align-items:center;gap:.6rem}
+.brand i{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;font-style:normal;font-size:.95rem;
+  background:linear-gradient(135deg,var(--aqua),#3b82f6);color:#05142e}
+nav.tabs{pointer-events:auto;display:flex;gap:4px;padding:5px;border-radius:999px;background:rgba(10,20,60,.55);
+  border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+nav.tabs a{position:relative;text-decoration:none;padding:.5rem 1.05rem;border-radius:999px;font-weight:500;font-size:.95rem;color:var(--ink-soft);
+  transition:color .25s,background .25s}
+nav.tabs a:hover{color:var(--ink)}
+nav.tabs a[aria-current="page"]{color:#05142e;background:linear-gradient(135deg,var(--aqua),#9ff3e6);font-weight:600}
 
-  /* ---- hero ---- */
-  header.hero{padding:64px 0 40px;}
-  .hero-grid{display:grid; grid-template-columns:1.3fr 0.9fr; gap:32px; align-items:center;}
-  @media (max-width:720px){ .hero-grid{grid-template-columns:1fr;} }
-  h1{
-    font-size:clamp(32px,5vw,48px);
-    line-height:1.12;
-    margin:0 0 18px;
-    font-weight:700;
-    letter-spacing:-0.01em;
-  }
-  .hero p.lede{
-    font-size:18px;
-    color:var(--muted);
-    max-width:52ch;
-    margin:0 0 24px;
-  }
-  .hero .loc{
-    font-family:var(--mono);
-    font-size:13px;
-    color:var(--steel);
-    border-left:3px solid var(--copper);
-    padding-left:10px;
-  }
-  .route-svg{width:100%; height:auto;}
+/* Views */
+main{min-height:100%;position:relative}
+.view{display:none;min-height:100vh;padding:calc(var(--nav-h) + 48px + env(safe-area-inset-top,0px)) 24px calc(60px + env(safe-area-inset-bottom,0px));max-width:1120px;margin:0 auto}
+.view.active{display:block}
+.view.enter .reveal{animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+.view.enter .reveal:nth-child(2){animation-delay:.08s}
+.view.enter .reveal:nth-child(3){animation-delay:.16s}
+.view.enter .reveal:nth-child(4){animation-delay:.24s}
+.view.enter .reveal:nth-child(5){animation-delay:.32s}
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
 
-  /* ---- section shell ---- */
-  section{padding:48px 0; border-top:1px solid var(--paper-line);}
-  h2{
-    font-family:var(--mono);
-    font-size:14px;
-    font-weight:600;
-    letter-spacing:0.02em;
-    color:var(--steel);
-    margin:0 0 24px;
-  }
-  h2 .num{color:var(--copper);}
+/* Page wipe transition */
+.wipe{position:fixed;inset:0;z-index:50;pointer-events:none;display:flex}
+.wipe span{flex:1;transform:translateY(101%);will-change:transform;
+  background:linear-gradient(180deg,#14307a,#0b5560)}
+.wipe span:nth-child(even){background:linear-gradient(180deg,#2a1778,#14307a)}
+.wipe.cover span{transform:translateY(0);transition:transform .5s cubic-bezier(.7,0,.2,1)}
+.wipe.cover span:nth-child(2){transition-delay:.05s}
+.wipe.cover span:nth-child(3){transition-delay:.1s}
+.wipe.cover span:nth-child(4){transition-delay:.15s}
+.wipe.cover span:nth-child(5){transition-delay:.2s}
+.wipe.leave span{transform:translateY(-101%);transition:transform .55s cubic-bezier(.7,0,.2,1)}
+.wipe.leave span:nth-child(2){transition-delay:.05s}
+.wipe.leave span:nth-child(3){transition-delay:.1s}
+.wipe.leave span:nth-child(4){transition-delay:.15s}
+.wipe.leave span:nth-child(5){transition-delay:.2s}
+.wipe.reset span{transition:none!important;transform:translateY(101%)}
 
-  /* ---- route table (skills) ---- */
-  table.routes{
-    width:100%;
-    border-collapse:collapse;
-    font-family:var(--mono);
-    font-size:14px;
-  }
-  table.routes th{
-    text-align:left;
-    font-weight:600;
-    color:var(--muted);
-    padding:8px 12px;
-    border-bottom:1px solid var(--ink);
-    font-size:12px;
-  }
-  table.routes td{
-    padding:10px 12px;
-    border-bottom:1px solid var(--paper-line);
-    vertical-align:top;
-  }
-  table.routes tr:last-child td{border-bottom:none;}
-  .status{
-    display:inline-block;
-    padding:2px 8px;
-    border-radius:3px;
-    font-size:12px;
-  }
-  .status.prod{background:#DCE9E3; color:#245A45;}
-  .status.lab{background:#DCE9E3; color:#245A45;}
+/* Typography */
+h1,h2,h3{font-family:var(--display);line-height:1.05;letter-spacing:-.02em}
+h1{font-size:clamp(2.9rem,9vw,6.4rem);font-weight:800}
+h2{font-size:clamp(2.1rem,5vw,3.4rem);font-weight:700;margin-bottom:.5rem}
+h3{font-size:1.3rem;font-weight:700;letter-spacing:-.01em}
+.lede{color:var(--ink-soft);max-width:62ch}
+.role{font-family:var(--display);font-weight:500;font-size:clamp(1.15rem,2.6vw,1.6rem);color:var(--aqua);margin:1.1rem 0 1.4rem}
+.sub{color:var(--ink-soft);max-width:60ch;margin-bottom:2.4rem}
 
-  /* ---- hops (projects) ---- */
-  .hop{
-    display:grid;
-    grid-template-columns:56px 1fr;
-    gap:16px;
-    padding:20px 0;
-    border-bottom:1px solid var(--paper-line);
-  }
-  .hop:last-child{border-bottom:none;}
-  .hop-n{
-    font-family:var(--mono);
-    color:var(--copper);
-    font-size:13px;
-    padding-top:3px;
-  }
-  .hop h3{margin:0 0 6px; font-size:18px;}
-  .hop p{margin:0 0 10px; color:var(--muted); max-width:60ch;}
-  .tags{display:flex; flex-wrap:wrap; gap:6px;}
-  .tag{
-    font-family:var(--mono);
-    font-size:12px;
-    color:var(--ink);
-    background:var(--card);
-    border:1px solid var(--paper-line);
-    padding:3px 8px;
-    border-radius:3px;
-  }
-  .hop-links a{font-size:13px; margin-right:14px;}
+/* Hero */
+.hero{display:flex;flex-direction:column;justify-content:center;min-height:calc(100vh - 160px)}
+.hero p.lede{font-size:1.15rem;margin-bottom:2rem}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:.5rem;text-decoration:none;font-weight:600;padding:.85rem 1.5rem;border-radius:999px;border:1px solid var(--line);
+  background:var(--glass);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:transform .25s,background .25s,border-color .25s;cursor:pointer;color:var(--ink);font:inherit;font-weight:600}
+.btn:hover{transform:translateY(-2px);background:var(--glass-strong);border-color:rgba(190,205,255,.4)}
+.btn.primary{background:linear-gradient(135deg,var(--amber),#ff9d4d);color:#2a1500;border-color:transparent}
+.btn.primary:hover{background:linear-gradient(135deg,#ffc57c,#ffad66)}
+.facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:2.4rem}
+.facts span{padding:.4rem .9rem;border-radius:999px;border:1px solid var(--line);background:rgba(10,20,60,.35);font-size:.92rem;color:var(--ink-soft)}
 
-  /* ---- experience ---- */
-  .role{
-    display:grid;
-    grid-template-columns:140px 1fr;
-    gap:16px;
-    padding:16px 0;
-    border-bottom:1px solid var(--paper-line);
-  }
-  .role:last-child{border-bottom:none;}
-  .role .when{font-family:var(--mono); font-size:13px; color:var(--muted); padding-top:2px;}
-  .role h3{margin:0 0 4px; font-size:16px;}
-  .role p{margin:0; color:var(--muted); font-size:15px;}
-  @media (max-width:560px){ .role, .hop{grid-template-columns:1fr;} }
+/* Panels */
+.panel{background:var(--glass);border:1px solid var(--line);border-radius:var(--radius);padding:1.6rem;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.grid{display:grid;gap:18px}
+.grid.two{grid-template-columns:repeat(2,1fr)}
+.grid.three{grid-template-columns:repeat(3,1fr)}
 
-  /* ---- footer ---- */
-  footer{
-    background:var(--ink);
-    color:#DCE3EC;
-    padding:40px 0 48px;
-  }
-  footer h2{color:#9FC3B8;}
-  .contact-line{
-    font-family:var(--mono);
-    font-size:15px;
-    margin:6px 0;
-  }
-  .contact-line .k{color:#7FB2A8;}
-  footer a{color:#DCE3EC; text-decoration-color:#5B6472;}
+/* Experience timeline */
+.timeline{position:relative;margin-left:10px;padding-left:34px;border-left:2px solid var(--line)}
+.job{position:relative;margin-bottom:22px}
+.job::before{content:"";position:absolute;left:-43px;top:1.7rem;width:16px;height:16px;border-radius:50%;background:var(--bg-a);border:3px solid var(--aqua);box-shadow:0 0 0 5px rgba(94,230,210,.15)}
+.job button.head{all:unset;box-sizing:border-box;cursor:pointer;display:flex;justify-content:space-between;gap:16px;align-items:flex-start;width:100%;padding:1.3rem 1.5rem}
+.job button.head:focus-visible{outline:3px solid var(--amber);outline-offset:-3px;border-radius:var(--radius)}
+.job .where{color:var(--ink-soft);font-size:.98rem;margin-top:.15rem}
+.job .when{color:var(--amber);font-weight:600;font-size:.95rem;white-space:nowrap}
+.job .chev{flex:none;width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:transform .35s,background .25s;margin-top:2px}
+.job[data-open="true"] .chev{transform:rotate(180deg);background:var(--glass-strong)}
+.job .body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s cubic-bezier(.2,.8,.2,1)}
+.job[data-open="true"] .body{grid-template-rows:1fr}
+.job .body>div{overflow:hidden}
+.job ul{padding:0 1.5rem 1.4rem 2.6rem;color:var(--ink-soft)}
+.job li{margin-bottom:.55rem}
+.job li::marker{color:var(--aqua)}
+.metrics{display:flex;flex-wrap:wrap;gap:10px;padding:0 1.5rem 1.4rem}
+.metrics b{font-family:var(--display);font-size:1.5rem;color:var(--amber);margin-right:.35rem}
+.metrics span{padding:.5rem 1rem;border-radius:12px;background:rgba(255,184,92,.1);border:1px solid rgba(255,184,92,.3);font-size:.92rem;color:var(--ink-soft)}
+
+/* Skills */
+.skillgroup h3{margin-bottom:1rem;display:flex;align-items:center;gap:.6rem}
+.skillgroup h3 i{font-style:normal;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:rgba(94,230,210,.15);font-size:1rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips li{list-style:none;padding:.35rem .8rem;border-radius:999px;font-size:.92rem;background:rgba(255,255,255,.07);border:1px solid var(--line);transition:background .25s,border-color .25s,transform .25s}
+.chips li:hover{background:rgba(94,230,210,.16);border-color:rgba(94,230,210,.5);transform:translateY(-2px)}
+
+/* Certifications */
+.cert{display:flex;gap:16px;align-items:center}
+.cert .yr{flex:none;width:68px;height:68px;border-radius:18px;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:1.15rem;
+  background:linear-gradient(135deg,rgba(94,230,210,.28),rgba(59,130,246,.28));border:1px solid rgba(94,230,210,.4)}
+.cert.featured .yr{background:linear-gradient(135deg,var(--amber),#ff9d4d);color:#2a1500;border:none}
+.cert p{color:var(--ink-soft);font-size:.95rem}
+.edu{margin-top:18px}
+
+/* Contact */
+.contact-card{display:flex;flex-direction:column;gap:12px}
+.contact-link{display:flex;align-items:center;gap:16px;text-decoration:none;padding:1.2rem 1.4rem;border-radius:var(--radius);background:var(--glass);border:1px solid var(--line);transition:transform .3s,border-color .3s,background .3s;word-break:break-word}
+.contact-link:hover{transform:translateX(6px);border-color:var(--aqua);background:var(--glass-strong)}
+.contact-link .ic{flex:none;width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:1.3rem;background:rgba(94,230,210,.15)}
+.contact-link small{display:block;color:var(--ink-soft);font-size:.85rem}
+footer{margin-top:3rem;color:var(--ink-soft);font-size:.9rem}
+
+/* Responsive */
+@media (max-width:860px){
+  .grid.three{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:700px){
+  :root{--nav-h:56px}
+  header.nav{padding-inline:14px}
+  .brand span{display:none}
+  nav.tabs{position:fixed;left:14px;right:14px;bottom:calc(12px + env(safe-area-inset-bottom,0px));justify-content:space-between;z-index:25;
+    box-shadow:0 10px 30px rgba(0,0,0,.35)}
+  nav.tabs a{flex:1;text-align:center;padding:.6rem .2rem;font-size:.82rem}
+  .view{padding-inline:18px;padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}
+  .grid.two,.grid.three{grid-template-columns:1fr}
+  .timeline{padding-left:26px;margin-left:6px}
+  .job::before{left:-35px}
+  .job button.head{flex-wrap:wrap;padding:1.1rem}
+  .job ul{padding:0 1.1rem 1.2rem 2.2rem}
+  .metrics{padding-inline:1.1rem}
+  .hero{min-height:calc(100vh - 220px)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
+}
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="bg" aria-hidden="true"></div>
+<canvas id="net" aria-hidden="true"></canvas>
+<div class="wipe" id="wipe" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
 
-<div class="topbar">
-  <div class="wrap">
-    <span class="prompt">$</span>
-    <span>Tochukwu Ugwu</span>
-    <span>·</span>
-    <span>Cloud Infrastructure/Network Engineer</span>
-    <span>·</span>
-    <span>Nigeria</span>
-    </div>
-</div>
-
-<header class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <h1>Connecting cloud networks that hold up under load.</h1>
-      <p class="lede">I design and secure Cloud network infrastructure — ExpressRoute circuits, Virtual WAN topologies, and the monitoring that keeps them honest.</p>
-      <p class="loc">open to remote roles · UK time zones</p>
-    </div>
-    <svg class="route-svg" viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram of network nodes connected by routing lines">
-      <g fill="none" stroke="#3D5A80" stroke-width="1.5">
-        <path d="M30 160 L100 100 L100 40" />
-        <path d="M100 100 L180 130 L230 90" />
-        <path d="M100 40 L180 40 L230 90" />
-        <path d="M30 160 L80 175 L150 170 L230 90" />
-      </g>
-      <g>
-        <circle cx="30" cy="160" r="6" fill="#16243A"/>
-        <circle cx="100" cy="100" r="6" fill="#16243A"/>
-        <circle cx="100" cy="40" r="6" fill="#16243A"/>
-        <circle cx="180" cy="40" r="6" fill="#16243A"/>
-        <circle cx="180" cy="130" r="6" fill="#16243A"/>
-        <circle cx="230" cy="90" r="7" fill="#B8542F"/>
-        <circle cx="80" cy="175" r="4" fill="#3D5A80"/>
-        <circle cx="150" cy="170" r="4" fill="#3D5A80"/>
-      </g>
-    </svg>
-  </div>
+<header class="nav">
+  <a class="brand" href="#home" data-link aria-label="Tochukwu Ugwu, home"><i>TU</i><span>Tochukwu Ugwu</span></a>
+  <nav class="tabs" aria-label="Main">
+    <a href="#home" data-link>Home</a>
+    <a href="#experience" data-link>Experience</a>
+    <a href="#skills" data-link>Skills</a>
+    <a href="#certifications" data-link>Certs</a>
+    <a href="#contact" data-link>Contact</a>
+  </nav>
 </header>
 
-<section id="skills">
-  <div class="wrap">
-    <h2><span class="num">01</span> &nbsp;route table — skills</h2>
-    <table class="routes">
-      <thead>
-        <tr><th>destination</th><th>via</th><th>status</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>ExpressRoute</td><td>circuit design, peering, failover</td><td><span class="status prod">production</span></td></tr>
-        <tr><td>Azure WAF</td><td>rule sets, policy tuning</td><td><span class="status prod">production</span></td></tr>
-        <tr><td>Azure Monitor</td><td>alerting, diagnostics, dashboards</td><td><span class="status prod">production</span></td></tr>
-        <tr><td>Network Watcher</td><td>flow logs, connection troubleshoot</td><td><span class="status prod">production</span></td></tr>
-        <tr><td>Azure Virtual WAN</td><td>hub-and-spoke, branch connectivity</td><td><span class="status lab">production</span></td></tr>
-        <tr><td>Azure Front Door</td><td>global routing, WAF at the edge</td><td><span class="status lab">production</span></td></tr>
-        <tr><td>Traffic Manager</td><td>DNS-based load balancing</td><td><span class="status lab">production</span></td></tr>
-        <tr><td>Terraform</td><td>infrastructure as code</td><td><span class="status lab">production</span></td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
+<main id="main">
 
-<section id="projects">
-  <div class="wrap">
-    <h2><span class="num">02</span> &nbsp;traceroute — lab projects</h2>
-
-    <div class="hop">
-      <div class="hop-n">hop 1</div>
-      <div>
-        <h3>[Project name — e.g. Hub-and-spoke Virtual WAN build]</h3>
-        <p>[One or two sentences: what you built, the problem it solved, and the outcome — e.g. "Built a multi-region Virtual WAN hub connecting three simulated branch sites, with route filtering and a secured hub for centralized firewall inspection."]</p>
-        <div class="tags">
-          <span class="tag">Virtual WAN</span>
-          <span class="tag">Terraform</span>
-          <span class="tag">BGP</span>
-        </div>
-        <p class="hop-links"><a href="#">repo</a><a href="#">write-up</a></p>
+  <!-- HOME -->
+  <section class="view" id="home" aria-label="Home">
+    <div class="hero">
+      <h1 class="reveal">Tochukwu<br>Ugwu</h1>
+      <p class="role reveal">Cloud and Network Engineer</p>
+      <p class="lede reveal">I design, secure and run networks that span Azure and on-premises sites. My work covers hybrid connectivity, firewalls, private access to cloud services, and the monitoring that keeps them reliable.</p>
+      <div class="btns reveal">
+        <a class="btn primary" href="#experience" data-link>See my experience</a>
+        <a class="btn" href="#contact" data-link>Get in touch</a>
+      </div>
+      <div class="facts reveal" aria-label="Quick facts">
+        <span>Azure Network Engineer Associate, 2026</span>
+        <span>Fortinet Network Security Professional</span>
+        <span>Working remotely from Nigeria</span>
       </div>
     </div>
+  </section>
 
-    <div class="hop">
-      <div class="hop-n">hop 2</div>
-      <div>
-        <h3>[Project name — e.g. Front Door + WAF edge routing]</h3>
-        <p>[Describe the setup, the traffic pattern you tested, and what you measured or learned.]</p>
-        <div class="tags">
-          <span class="tag">Front Door</span>
-          <span class="tag">WAF</span>
-          <span class="tag">Traffic Manager</span>
-        </div>
-        <p class="hop-links"><a href="#">repo</a><a href="#">write-up</a></p>
+  <!-- EXPERIENCE -->
+  <section class="view" id="experience" aria-label="Experience">
+    <h2 class="reveal">Experience</h2>
+    <p class="sub reveal">From telecom field work to senior cloud networking. Select a role to read the details.</p>
+    <div class="timeline reveal">
+
+      <article class="job panel" style="padding:0" data-open="true">
+        <button class="head" aria-expanded="true">
+          <span><h3>Sr. Networking Engineer (Cloud Specialist)</h3><div class="where">Eastbay Technologies, Canada (fully remote from Nigeria)</div><div class="when" style="margin-top:.4rem">Jul 2021 – Mar 2026</div></span>
+          <span class="chev" aria-hidden="true">⌄</span>
+        </button>
+        <div class="body"><div>
+          <ul>
+            <li>Designed and maintained enterprise network and security infrastructure across on-premises, cloud and hybrid environments.</li>
+            <li>Implemented and optimised routing and switching with Fortinet and SonicWall firewalls and Dell and Aruba switches.</li>
+            <li>Managed Azure network resources including VNets, Application Gateway, VPN Gateway, Azure Front Door, Virtual WAN, Private Endpoints, Azure Firewall, WAF and load balancers.</li>
+            <li>Deployed hybrid connectivity using ExpressRoute, site-to-site and point-to-site VPNs, Virtual WAN and SD-WAN.</li>
+            <li>Applied layered security with VLAN segmentation, firewall policy management, RBAC, NSG, ASG and infrastructure hardening.</li>
+            <li>Configured Azure DNS and Private DNS Zones, and managed IP addressing (IPAM) across Azure subscriptions.</li>
+            <li>Maintained Private Link and Private Endpoint configurations to secure connectivity to PaaS services.</li>
+            <li>Reduced downtime and recurring incidents through monitoring, log analysis and root cause analysis with Azure Monitor, Network Watcher and Connection Monitor.</li>
+            <li>Found security gaps and led remediation and configuration changes to address operational issues and emerging threats.</li>
+            <li>Wrote technical documentation and ran knowledge-transfer sessions to improve team troubleshooting.</li>
+            <li>Supported automation of repetitive operational tasks with Terraform.</li>
+            <li>Worked with Microsoft Entra ID for identity and access management, governance and compliance.</li>
+          </ul>
+        </div></div>
+      </article>
+
+      <article class="job panel" style="padding:0" data-open="false">
+        <button class="head" aria-expanded="false">
+          <span><h3>Microsoft Azure Support Engineer</h3><div class="where">Tek-Experts, Nigeria</div><div class="when" style="margin-top:.4rem">Sep 2019 – Jun 2021</div></span>
+          <span class="chev" aria-hidden="true">⌄</span>
+        </button>
+        <div class="body"><div>
+          <ul>
+            <li>Diagnosed and resolved advanced VPN, routing, firewall, DNS and connectivity incidents across Azure and on-premises hybrid networks in SLA-driven environments.</li>
+            <li>Supported firewall management across Cisco, SonicWall, Fortinet and Palo Alto Networks platforms.</li>
+            <li>Handled high-priority security incidents with global cross-functional teams, leading root cause analysis and timely resolution.</li>
+            <li>Supported Azure Load Balancer, Application Gateway, NAT Gateway, Bastion, Private Link and Endpoints, and Virtual Network Gateways for highly available architectures.</li>
+            <li>Aligned enterprise cloud network configurations with organisational security standards and regulatory requirements.</li>
+          </ul>
+        </div></div>
+      </article>
+
+      <article class="job panel" style="padding:0" data-open="false">
+        <button class="head" aria-expanded="false">
+          <span><h3>Network Engineer</h3><div class="where">Swift Networks Limited, Lagos</div><div class="when" style="margin-top:.4rem">Oct 2018 – Sep 2019</div></span>
+          <span class="chev" aria-hidden="true">⌄</span>
+        </button>
+        <div class="body"><div>
+          <ul>
+            <li>Resolved escalated network and connectivity incidents, minimising downtime across customer environments.</li>
+            <li>Deployed and maintained routers, switches and remote-site connectivity for multiple enterprise customer sites.</li>
+            <li>Worked with vendors and stakeholders to complete projects and keep network configurations secure.</li>
+            <li>Managed outdoor network connectivity projects for customer special events.</li>
+          </ul>
+        </div></div>
+      </article>
+
+      <article class="job panel" style="padding:0" data-open="false">
+        <button class="head" aria-expanded="false">
+          <span><h3>Team Member, Networks</h3><div class="where">DreamMesh Limited, Lagos</div><div class="when" style="margin-top:.4rem">Mar 2018 – Sep 2018</div></span>
+          <span class="chev" aria-hidden="true">⌄</span>
+        </button>
+        <div class="body"><div>
+          <ul>
+            <li>Installed and configured Cisco routers, switches and wireless access points for secure LAN and WLAN connectivity.</li>
+            <li>Monitored LAN, WAN, servers and network applications.</li>
+            <li>Produced performance reports to support SLA monitoring.</li>
+          </ul>
+        </div></div>
+      </article>
+
+      <article class="job panel" style="padding:0" data-open="false">
+        <button class="head" aria-expanded="false">
+          <span><h3>Field Service Engineer (Graduate Engineer)</h3><div class="where">IHS Nigeria Limited, Lagos</div><div class="when" style="margin-top:.4rem">Oct 2016 – Oct 2017</div></span>
+          <span class="chev" aria-hidden="true">⌄</span>
+        </button>
+        <div class="body"><div>
+          <div class="metrics" style="padding-top:.2rem">
+            <span><b>98%+</b>site power availability</span>
+            <span><b>40%</b>fewer prolonged outages</span>
+          </div>
+          <ul>
+            <li>Maintained and optimised telecom infrastructure and power systems across all managed locations.</li>
+            <li>Responded to site failures within SLA targets, troubleshooting and restoring service.</li>
+          </ul>
+        </div></div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="view" id="skills" aria-label="Skills">
+    <h2 class="reveal">Skills</h2>
+    <p class="sub reveal">The platforms and practices I use day to day.</p>
+    <div class="grid two">
+      <div class="panel skillgroup reveal">
+        <h3><i>🛡</i>Network security</h3>
+        <ul class="chips">
+          <li>Firewall management</li><li>Firewall policy</li><li>Network security</li><li>VPNs</li><li>MFA</li><li>Endpoint protection</li><li>Segmentation</li><li>NSG and ASG</li>
+        </ul>
+      </div>
+      <div class="panel skillgroup reveal">
+        <h3><i>🌐</i>Networking and infrastructure</h3>
+        <ul class="chips">
+          <li>Routing and switching</li><li>Azure and on-premises networking</li><li>Virtual WAN</li><li>Load Balancer</li><li>DNS</li><li>Application Gateway</li><li>Traffic Manager</li><li>VPN Gateway</li><li>ExpressRoute</li><li>SD-WAN</li><li>Private Link</li>
+        </ul>
+      </div>
+      <div class="panel skillgroup reveal">
+        <h3><i>📡</i>Operations</h3>
+        <ul class="chips">
+          <li>SLA management</li><li>Incident response</li><li>Root cause analysis</li><li>Security advisory</li><li>Vendor and stakeholder collaboration</li><li>Technical documentation</li>
+        </ul>
+      </div>
+      <div class="panel skillgroup reveal">
+        <h3><i>🧰</i>Tools and platforms</h3>
+        <ul class="chips">
+          <li>Azure</li><li>Palo Alto Networks</li><li>Fortinet</li><li>Cisco NGFW</li><li>SonicWall</li><li>PRTG</li><li>Azure Network Watcher</li><li>Azure Monitor</li><li>Terraform</li><li>Microsoft Entra ID</li>
+        </ul>
       </div>
     </div>
+  </section>
 
-    <div class="hop">
-      <div class="hop-n">hop 3</div>
-      <div>
-        <h3>[Project name — e.g. IaC pipeline for network baseline]</h3>
-        <p>[Describe how Terraform/Bicep/Ansible were used together, and what the pipeline deploys.]</p>
-        <div class="tags">
-          <span class="tag">Bicep</span>
-          <span class="tag">Ansible</span>
-          <span class="tag">Azure DevOps</span>
-        </div>
-        <p class="hop-links"><a href="#">repo</a><a href="#">write-up</a></p>
-      </div>
+  <!-- CERTIFICATIONS -->
+  <section class="view" id="certifications" aria-label="Certifications and education">
+    <h2 class="reveal">Certifications</h2>
+    <p class="sub reveal">Microsoft and Fortinet credentials, plus my engineering degree.</p>
+    <div class="grid two">
+      <div class="panel cert featured reveal"><div class="yr">2026</div><div><h3>Azure Network Engineer Associate</h3><p>Microsoft</p></div></div>
+      <div class="panel cert reveal"><div class="yr">2021</div><div><h3>Network Security Professional</h3><p>Fortinet</p></div></div>
+      <div class="panel cert reveal"><div class="yr">2020</div><div><h3>Azure Solutions Architect</h3><p>Microsoft</p></div></div>
+      <div class="panel cert reveal"><div class="yr">2020</div><div><h3>Microsoft Certified Trainer</h3><p>Microsoft</p></div></div>
+      <div class="panel cert reveal"><div class="yr">2019</div><div><h3>Azure Certified Administrator</h3><p>Microsoft</p></div></div>
     </div>
-  </div>
-</section>
-
-<section id="experience">
-  <div class="wrap">
-    <h2><span class="num">03</span> &nbsp;experience</h2>
-
-    <div class="role">
-      <div class="when">[dates]</div>
-      <div>
-        <h3>[Job title] — [Company]</h3>
-        <p>[One line on scope — e.g. "Managed ExpressRoute connectivity and WAF policy for a multi-site corporate network, using Azure Monitor and Network Watcher for ongoing diagnostics."]</p>
-      </div>
+    <div class="panel edu reveal">
+      <h3>Bachelor of Engineering, Electrical</h3>
+      <p class="lede">University of Nigeria Nsukka · Oct 2008 – Jul 2013 · Second Class Honours, Upper Division</p>
     </div>
+  </section>
 
-    <div class="role">
-      <div class="when">[dates]</div>
-      <div>
-        <h3>[Job title] — [Company]</h3>
-        <p>[One line on scope.]</p>
-      </div>
+  <!-- CONTACT -->
+  <section class="view" id="contact" aria-label="Contact">
+    <h2 class="reveal">Let's talk</h2>
+    <p class="sub reveal">I'm open to Azure and network engineering roles. Email is the fastest way to reach me.</p>
+    <div class="contact-card reveal">
+      <a class="contact-link" href="mailto:tochukwuugwu.e@gmail.com"><span class="ic">✉</span><span><small>Email</small>tochukwuugwu.e@gmail.com</span></a>
+      <a class="contact-link" href="https://www.linkedin.com/in/tochukwuugwu/" target="_blank" rel="noopener"><span class="ic">in</span><span><small>LinkedIn</small>linkedin.com/in/tochukwuugwu</span></a>
     </div>
-  </div>
-</section>
+    <footer class="reveal">© <span id="yr"></span> Tochukwu Ugwu</footer>
+  </section>
 
-<footer>
-  <div class="wrap">
-    <h2>04 &nbsp;contact</h2>
-    <p class="contact-line"><span class="k">$</span> email <a href="mailto:you@example.com">tochukwuugwu.e@gmail.com</a></p>
-    <p class="contact-line"><span class="k">$</span> linkedin <a href="#">linkedin.com/in/[tochukwuugwu/]</a></p>
-    <p class="contact-line"><span class="k">$</span> github <a href="#">github.com/[ugwuteecee]</a></p>
-  </div>
-</footer>
+</main>
 
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var views = Array.prototype.slice.call(document.querySelectorAll('.view'));
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.tabs a'));
+  var wipe = document.getElementById('wipe');
+  var ids = views.map(function(v){return v.id});
+  var current = null, busy = false;
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  function target(){ var h = location.hash.replace('#',''); return ids.indexOf(h) > -1 ? h : 'home'; }
+
+  function show(id){
+    views.forEach(function(v){
+      var on = v.id === id;
+      v.classList.toggle('active', on);
+      v.classList.remove('enter');
+      if(on){ void v.offsetWidth; v.classList.add('enter'); }
+    });
+    links.forEach(function(a){
+      if(a.getAttribute('href') === '#' + id){ a.setAttribute('aria-current','page'); }
+      else { a.removeAttribute('aria-current'); }
+    });
+    window.scrollTo(0,0);
+    document.title = (id === 'home' ? 'Tochukwu Ugwu' : id.charAt(0).toUpperCase() + id.slice(1) + ' | Tochukwu Ugwu') + ' | Cloud and Network Engineer';
+    current = id;
+    var h = document.querySelector('#' + id + ' h1, #' + id + ' h2');
+    if(h){ h.setAttribute('tabindex','-1'); h.focus({preventScroll:true}); }
+  }
+
+  function go(){
+    var id = target();
+    if(id === current) return;
+    if(current === null || reduce){ show(id); return; }
+    if(busy){ show(id); return; }
+    busy = true;
+    wipe.className = 'wipe';
+    void wipe.offsetWidth;
+    wipe.classList.add('cover');
+    setTimeout(function(){
+      show(target());
+      wipe.className = 'wipe leave';
+      setTimeout(function(){
+        wipe.className = 'wipe reset';
+        busy = false;
+        if(target() !== current) go();
+      }, 800);
+    }, 750);
+  }
+
+  window.addEventListener('hashchange', go);
+  go();
+
+  /* Accordion */
+  document.querySelectorAll('.job button.head').forEach(function(b){
+    b.addEventListener('click', function(){
+      var job = b.closest('.job');
+      var open = job.getAttribute('data-open') === 'true';
+      job.setAttribute('data-open', open ? 'false' : 'true');
+      b.setAttribute('aria-expanded', open ? 'false' : 'true');
+    });
+  });
+
+  /* Network canvas background */
+  var cv = document.getElementById('net'), ctx = cv.getContext('2d');
+  var W, H, dpr, nodes = [], mouse = {x:-9999,y:-9999};
+  function size(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    var n = Math.max(28, Math.min(90, Math.floor(W * H / 22000)));
+    nodes = [];
+    for(var i=0;i<n;i++){
+      nodes.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35,r:Math.random()*1.8+1,hub:Math.random()<.12});
+    }
+    if(reduce) draw();
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    var maxD = Math.min(170, Math.max(110, W/7));
+    for(var i=0;i<nodes.length;i++){
+      var a = nodes[i];
+      for(var j=i+1;j<nodes.length;j++){
+        var b = nodes[j], dx = a.x-b.x, dy = a.y-b.y, d = Math.sqrt(dx*dx+dy*dy);
+        if(d < maxD){
+          ctx.strokeStyle = 'rgba(150,200,255,' + (0.22*(1-d/maxD)) + ')';
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+        }
+      }
+      var mx = a.x-mouse.x, my = a.y-mouse.y, md = Math.sqrt(mx*mx+my*my);
+      if(md < 160){
+        ctx.strokeStyle = 'rgba(94,230,210,' + (0.5*(1-md/160)) + ')';
+        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(mouse.x,mouse.y); ctx.stroke();
+      }
+    }
+    for(var k=0;k<nodes.length;k++){
+      var n = nodes[k];
+      ctx.beginPath();
+      ctx.fillStyle = n.hub ? 'rgba(255,184,92,.9)' : 'rgba(190,225,255,.75)';
+      ctx.arc(n.x,n.y,n.hub ? n.r+1.8 : n.r,0,Math.PI*2); ctx.fill();
+    }
+  }
+  function tick(){
+    for(var i=0;i<nodes.length;i++){
+      var n = nodes[i];
+      n.x += n.vx; n.y += n.vy;
+      if(n.x < -20) n.x = W+20; if(n.x > W+20) n.x = -20;
+      if(n.y < -20) n.y = H+20; if(n.y > H+20) n.y = -20;
+    }
+    draw();
+    requestAnimationFrame(tick);
+  }
+  window.addEventListener('resize', size);
+  window.addEventListener('pointermove', function(e){ mouse.x = e.clientX; mouse.y = e.clientY; });
+  window.addEventListener('pointerleave', function(){ mouse.x = mouse.y = -9999; });
+  size();
+  if(!reduce) tick();
+})();
+</script>
 </body>
 </html>
