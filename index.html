@@ -162,6 +162,35 @@ h3{font-size:1.3rem;font-weight:700;letter-spacing:-.01em}
 .contact-link small{display:block;color:var(--ink-soft);font-size:.85rem}
 footer{margin-top:3rem;color:var(--ink-soft);font-size:.9rem}
 
+/* Projects */
+.pfilters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.pfilters button{font:inherit;font-size:.92rem;font-weight:500;cursor:pointer;color:var(--ink-soft);padding:.4rem 1rem;border-radius:999px;border:1px solid var(--line);background:var(--glass);transition:all .25s}
+.pfilters button:hover{color:var(--ink);border-color:rgba(190,205,255,.45)}
+.pfilters button[aria-pressed="true"]{color:#05142e;background:linear-gradient(135deg,var(--aqua),#9ff3e6);border-color:transparent;font-weight:600}
+.projects{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px}
+.proj{position:relative;display:flex;flex-direction:column;gap:.9rem;text-decoration:none;padding:1.5rem;border-radius:var(--radius);overflow:hidden;
+  background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .3s}
+.proj::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(260px circle at var(--mx,50%) var(--my,0%),rgba(94,230,210,.22),transparent 65%)}
+.proj:hover{transform:translateY(-6px);border-color:rgba(94,230,210,.55);box-shadow:0 18px 40px rgba(0,0,20,.35)}
+.proj:hover::before{opacity:1}
+.proj .top{display:flex;align-items:center;gap:12px}
+.proj .folder{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:1.1rem;background:rgba(94,230,210,.15)}
+.proj h3{font-size:1.2rem;word-break:break-word;flex:1}
+.proj .go{flex:none;opacity:0;transform:translate(-6px,6px);transition:all .3s;color:var(--amber);font-size:1.2rem}
+.proj:hover .go{opacity:1;transform:none}
+.proj p{color:var(--ink-soft);font-size:.97rem;flex:1}
+.proj .tags{display:flex;flex-wrap:wrap;gap:6px;list-style:none}
+.proj .tags li{font-size:.8rem;padding:.15rem .6rem;border-radius:999px;background:rgba(255,184,92,.1);border:1px solid rgba(255,184,92,.28);color:#ffd9a8}
+.proj .meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;font-size:.88rem;color:var(--ink-soft);border-top:1px solid var(--line);padding-top:.9rem}
+.proj .dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.proj.skeleton{min-height:210px;background:linear-gradient(100deg,rgba(255,255,255,.04) 30%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.04) 70%);background-size:300% 100%;animation:shimmer 1.4s linear infinite}
+@keyframes shimmer{from{background-position:100% 0}to{background-position:-100% 0}}
+.pstate{padding:2rem;text-align:center;color:var(--ink-soft)}
+.pstate .btn{margin-top:1rem}
+.pfoot{margin-top:26px}
+
 /* Responsive */
 @media (max-width:860px){
   .grid.three{grid-template-columns:repeat(2,1fr)}
@@ -172,7 +201,8 @@ footer{margin-top:3rem;color:var(--ink-soft);font-size:.9rem}
   .brand span{display:none}
   nav.tabs{position:fixed;left:14px;right:14px;bottom:calc(12px + env(safe-area-inset-bottom,0px));justify-content:space-between;z-index:25;
     box-shadow:0 10px 30px rgba(0,0,0,.35)}
-  nav.tabs a{flex:1;text-align:center;padding:.6rem .2rem;font-size:.82rem}
+  nav.tabs a{flex:1;text-align:center;padding:.6rem .1rem;font-size:.72rem}
+  .projects{grid-template-columns:1fr}
   .view{padding-inline:18px;padding-bottom:calc(110px + env(safe-area-inset-bottom,0px))}
   .grid.two,.grid.three{grid-template-columns:1fr}
   .timeline{padding-left:26px;margin-left:6px}
@@ -199,6 +229,7 @@ footer{margin-top:3rem;color:var(--ink-soft);font-size:.9rem}
     <a href="#home" data-link>Home</a>
     <a href="#experience" data-link>Experience</a>
     <a href="#skills" data-link>Skills</a>
+    <a href="#projects" data-link>Projects</a>
     <a href="#certifications" data-link>Certs</a>
     <a href="#contact" data-link>Contact</a>
   </nav>
@@ -350,6 +381,15 @@ footer{margin-top:3rem;color:var(--ink-soft);font-size:.9rem}
     </div>
   </section>
 
+  <!-- PROJECTS -->
+  <section class="view" id="projects" aria-label="Projects">
+    <h2 class="reveal">Projects</h2>
+    <p class="sub reveal">Live from my GitHub. New repositories show up here automatically.</p>
+    <div class="pfilters reveal" id="pfilters" role="group" aria-label="Filter by language" hidden></div>
+    <div class="projects reveal" id="projects-grid" aria-live="polite"></div>
+    <div class="pfoot reveal"><a class="btn" id="gh-all" href="https://github.com" target="_blank" rel="noopener">View all on GitHub</a></div>
+  </section>
+
   <!-- CERTIFICATIONS -->
   <section class="view" id="certifications" aria-label="Certifications and education">
     <h2 class="reveal">Certifications</h2>
@@ -442,6 +482,102 @@ footer{margin-top:3rem;color:var(--ink-soft);font-size:.9rem}
       b.setAttribute('aria-expanded', open ? 'false' : 'true');
     });
   });
+
+
+  /* GitHub projects */
+  /* ===== EDIT THESE ===== */
+  var GITHUB_USERNAME = '';          // e.g. 'tochukwuugwu'. Leave empty on <name>.github.io and it is detected for you.
+  var FEATURED = [];                 // optional repo names to show first, e.g. ['azure-hub-spoke','terraform-labs']
+  var HIDE = [];                     // repo names to leave out
+  var SHOW_FORKS = false;
+  /* ====================== */
+  (function(){
+    var grid = document.getElementById('projects-grid');
+    var filt = document.getElementById('pfilters');
+    var allBtn = document.getElementById('gh-all');
+    var user = GITHUB_USERNAME;
+    if(!user && /\.github\.io$/.test(location.hostname)) user = location.hostname.split('.')[0];
+    var colors = {JavaScript:'#f1e05a',TypeScript:'#3178c6',Python:'#3572a5',HTML:'#e34c26',CSS:'#9b6bff',Shell:'#89e051',PowerShell:'#5391fe',HCL:'#8a6ff0',Bicep:'#519aba','Jupyter Notebook':'#da5b0b',Go:'#00add8',Java:'#b07219','C#':'#2fa84f',Dockerfile:'#6fa8dc'};
+    var repos = [], active = 'All', started = false;
+
+    function el(t,c,x){var e=document.createElement(t); if(c)e.className=c; if(x!=null)e.textContent=x; return e;}
+    function ago(d){
+      var s=(Date.now()-new Date(d))/1000, u=[['year',31536000],['month',2592000],['week',604800],['day',86400],['hour',3600]];
+      for(var i=0;i<u.length;i++){ var n=Math.floor(s/u[i][1]); if(n>=1) return 'Updated '+n+' '+u[i][0]+(n>1?'s':'')+' ago'; }
+      return 'Updated just now';
+    }
+    function state(msg,btnText,btnHref){
+      grid.textContent=''; filt.hidden=true;
+      var d=el('div','pstate panel'); d.appendChild(el('p',null,msg));
+      if(btnText){ var a=el('a','btn primary',btnText); a.href=btnHref; a.target='_blank'; a.rel='noopener'; d.appendChild(a); }
+      grid.appendChild(d);
+    }
+    function skeletons(){
+      grid.textContent='';
+      for(var i=0;i<6;i++){ var s=el('div','proj skeleton'); s.setAttribute('aria-hidden','true'); grid.appendChild(s); }
+    }
+    function card(r){
+      var a=el('a','proj'); a.href=r.html_url; a.target='_blank'; a.rel='noopener';
+      a.setAttribute('aria-label', r.name+' on GitHub');
+      var top=el('div','top'); top.appendChild(el('span','folder','📁')); top.appendChild(el('h3',null,r.name)); top.appendChild(el('span','go','↗'));
+      a.appendChild(top);
+      a.appendChild(el('p',null,r.description||'No description yet. Open the repository to read more.'));
+      if(r.topics&&r.topics.length){ var ul=el('ul','tags'); r.topics.slice(0,5).forEach(function(t){ul.appendChild(el('li',null,t));}); a.appendChild(ul); }
+      var m=el('div','meta');
+      if(r.language){ var l=el('span'); var dot=el('i','dot'); dot.style.background=colors[r.language]||'#9fb3ff'; l.appendChild(dot); l.appendChild(document.createTextNode(r.language)); m.appendChild(l); }
+      m.appendChild(el('span',null,'★ '+r.stargazers_count));
+      m.appendChild(el('span',null,'⑂ '+r.forks_count));
+      m.appendChild(el('span',null,ago(r.pushed_at)));
+      a.appendChild(m);
+      a.addEventListener('pointermove',function(e){var b=a.getBoundingClientRect(); a.style.setProperty('--mx',(e.clientX-b.left)+'px'); a.style.setProperty('--my',(e.clientY-b.top)+'px');});
+      return a;
+    }
+    function render(){
+      grid.textContent='';
+      var list=repos.filter(function(r){return active==='All'||r.language===active;});
+      if(!list.length){ state('No repositories match this filter.'); filt.hidden=false; return; }
+      list.forEach(function(r){grid.appendChild(card(r));});
+    }
+    function filters(){
+      var langs={}; repos.forEach(function(r){ if(r.language) langs[r.language]=(langs[r.language]||0)+1; });
+      var names=Object.keys(langs).sort(function(a,b){return langs[b]-langs[a];});
+      filt.textContent='';
+      if(names.length<2){ filt.hidden=true; return; }
+      ['All'].concat(names).forEach(function(n){
+        var b=el('button',null,n); b.type='button'; b.setAttribute('aria-pressed', n===active?'true':'false');
+        b.addEventListener('click',function(){ active=n; Array.prototype.forEach.call(filt.children,function(c){c.setAttribute('aria-pressed',c===b?'true':'false');}); render(); });
+        filt.appendChild(b);
+      });
+      filt.hidden=false;
+    }
+    function prep(data){
+      repos=data.filter(function(r){
+        return (SHOW_FORKS||!r.fork) && !r.archived && HIDE.indexOf(r.name)<0 && r.name.toLowerCase()!==(user+'.github.io').toLowerCase() && r.name!==user;
+      });
+      repos.sort(function(a,b){
+        var fa=FEATURED.indexOf(a.name), fb=FEATURED.indexOf(b.name);
+        if(fa>-1||fb>-1) return (fa<0?999:fa)-(fb<0?999:fb);
+        return new Date(b.pushed_at)-new Date(a.pushed_at);
+      });
+      if(!repos.length){ state('No public repositories to show yet.','Open my GitHub','https://github.com/'+user); return; }
+      filters(); render();
+    }
+    function load(){
+      if(started) return; started=true;
+      if(!user){ state('Add your GitHub username in the GITHUB_USERNAME setting near the bottom of index.html and your repositories will appear here.'); return; }
+      allBtn.href='https://github.com/'+user+'?tab=repositories';
+      var key='gh-repos-'+user;
+      try{ var c=JSON.parse(sessionStorage.getItem(key)); if(c&&Date.now()-c.t<600000){ prep(c.d); return; } }catch(e){}
+      skeletons();
+      fetch('https://api.github.com/users/'+encodeURIComponent(user)+'/repos?per_page=100&sort=pushed')
+        .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function(d){ try{sessionStorage.setItem(key,JSON.stringify({t:Date.now(),d:d}));}catch(e){} prep(d); })
+        .catch(function(){ started=false; state('GitHub could not be reached just now. Try again in a minute, or browse the repositories directly.','Open GitHub','https://github.com/'+user); });
+    }
+    window.addEventListener('hashchange',function(){ if(location.hash==='#projects') load(); });
+    if(location.hash==='#projects') load();
+    else setTimeout(load,1500);
+  })();
 
   /* Network canvas background */
   var cv = document.getElementById('net'), ctx = cv.getContext('2d');
